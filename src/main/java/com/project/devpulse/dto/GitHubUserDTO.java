@@ -4,10 +4,9 @@ import lombok.Data;
 
 @Data
 public class GitHubUserDTO {
-
     private String login;
-    private Long id;
     private String avatar_url;
-    private Integer followers;   // safer for null handling
-    private Integer following;
+    private int followers;           // add this
+    private int public_repos;
+    private String created_at;       // add this — account age
 }
