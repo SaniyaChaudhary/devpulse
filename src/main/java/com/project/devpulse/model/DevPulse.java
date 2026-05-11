@@ -24,7 +24,7 @@ public class DevPulse {
     private String mostUsedLanguage;
     private int totalCommitsLast30Days;
     private int activityScore;
-    private String consistency;
+    private String repoVolumeTier;
     private Instant lastFetched;
 
     // Phase 1 additions

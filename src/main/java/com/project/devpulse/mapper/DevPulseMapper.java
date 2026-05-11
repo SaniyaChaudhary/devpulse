@@ -13,5 +13,5 @@ public interface DevPulseMapper {
 
     DevPulseResponseDTO toResponseDTO(DevPulse devPulse);
 
-    DevPulse toEntity(GitHubUserDTO user, List<GitHubRepoDTO> repos);
+
 }

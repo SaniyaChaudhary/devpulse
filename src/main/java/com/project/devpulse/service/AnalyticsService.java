@@ -14,6 +14,8 @@ import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
@@ -86,7 +88,7 @@ public class AnalyticsService {
                 .repoGrowthRate(repoGrowthRate)
                 .recentlyActiveRepos(recentlyActiveRepos)
                 .activityScore(activityScore)
-                .consistency(calculateConsistency(repos))
+                .repoVolumeTier(calculateRepoVolumeTier(repos))
                 .developerTier(developerTier)
                 .lastFetched(Instant.now())
                 .build();
@@ -134,15 +136,14 @@ public class AnalyticsService {
 
     private int calculateAccountAge(String createdAt) {
         if (createdAt == null || createdAt.isBlank()) return 0;
-        return (int) ChronoUnit.YEARS.between(
-                Instant.parse(createdAt), Instant.now()
-        );
+        LocalDate created = LocalDate.parse(createdAt, DateTimeFormatter.ISO_DATE_TIME);
+        return (int) ChronoUnit.YEARS.between(created, LocalDate.now());
     }
 
     private int calculateActivityScore(int repoCount, int totalStars,
                                        int recentlyActive, int languageCount) {
         return (repoCount * 2)
-                + (totalStars * 5)
+                + (int)(Math.log1p(totalStars) * 50)  // log scale, not linear
                 + (recentlyActive * 10)
                 + (languageCount * 8);
     }
@@ -153,7 +154,7 @@ public class AnalyticsService {
         return "Hobbyist";
     }
 
-    private String calculateConsistency(List<GitHubRepoDTO> repos) {
+    private String calculateRepoVolumeTier(List<GitHubRepoDTO> repos) {
         int repoCount = repos.size();
         return repoCount > 50 ? "HIGH" : repoCount > 20 ? "MEDIUM" : "LOW";
     }

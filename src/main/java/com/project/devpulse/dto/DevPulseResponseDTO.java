@@ -17,7 +17,7 @@ public class DevPulseResponseDTO {
     private Map<String, Long> languageDistribution;
 
     private int activityScore;
-    private String consistency;
+    private String repoVolumeTier;
     private String developerTier;
 
     // Phase 1 additions
